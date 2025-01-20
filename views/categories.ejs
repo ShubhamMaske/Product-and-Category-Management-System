@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Category Master</title>
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <h1>Add a Categories</h1>
+  <form action="/categories" method="POST">
+    <input type="number" name="categoryId" placeholder="Category ID" required />
+    <input type="text" name="name" placeholder="Category Name" required>
+    <textarea name="description" placeholder="Description"></textarea>
+    <button type="submit">Add Category</button>
+  </form>
+
+  <% if (categories && categories.length > 0) { %> <!-- Check if categories is defined and non-empty -->
+    <h2>Present Categories</h2>
+    <ul>
+      <% categories.forEach(category => { %>
+        <li>
+          <%= category.id %> - <%= category.name %> - <%= category.description %>
+          <!-- Edit Button -->
+          <button type="button" onclick="editCategory('<%= category.id %>', '<%= category.name %>', '<%= category.description %>')">Edit</button>
+
+          <!-- Delete Form -->
+          <form action="/categories/delete/<%= category.id %>" method="POST" style="display:inline;">
+            <button type="submit">Delete</button>
+          </form>
+          
+        </li>
+      <% }); %>
+    </ul>
+  <% } else { %>
+    <p>No categories available</p>
+  <% } %>
+
+  <script>
+    // Pre-fill the form for editing
+    function editCategory(id, name, description) {
+      document.querySelector('input[name="categoryId"]').value = id;
+      document.querySelector('input[name="name"]').value = name;
+      document.querySelector('textarea[name="description"]').value = description;
+
+      // Change the form action to update the category
+      document.querySelector('form').action = '/categories/edit/' + id;
+    }
+  </script>
+</body>
+</html>
